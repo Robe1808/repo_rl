@@ -18,7 +18,7 @@
 						"referenceName": "output_FINANCIAL",
 						"type": "DatasetReference"
 					},
-					"name": "outputtxt"
+					"name": "outputFinancial"
 				}
 			],
 			"transformations": [
@@ -70,7 +70,7 @@
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     partitionBy('hash', 1)) ~> outputtxt"
+				"     partitionBy('hash', 1)) ~> outputFinancial"
 			]
 		}
 	}
