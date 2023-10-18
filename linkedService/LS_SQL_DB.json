@@ -1,0 +1,11 @@
+{
+	"name": "LS_SQL_DB",
+	"properties": {
+		"description": "Linked service a base de datos de mentoria",
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"connectionString": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=server-rl.database.windows.net;Initial Catalog=db_mentoria"
+		}
+	}
+}
