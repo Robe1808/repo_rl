@@ -1,0 +1,84 @@
+{
+	"name": "CountByDayTemporal",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_storage18087",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "input"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "id",
+				"type": "String"
+			},
+			{
+				"name": "case_number",
+				"type": "String"
+			},
+			{
+				"name": "date",
+				"type": "String"
+			},
+			{
+				"name": "block",
+				"type": "String"
+			},
+			{
+				"name": "iucr",
+				"type": "String"
+			},
+			{
+				"name": "primary_type",
+				"type": "String"
+			},
+			{
+				"name": "description",
+				"type": "String"
+			},
+			{
+				"name": "location_description",
+				"type": "String"
+			},
+			{
+				"name": "arrest",
+				"type": "String"
+			},
+			{
+				"name": "domestic",
+				"type": "String"
+			},
+			{
+				"name": "beat",
+				"type": "String"
+			},
+			{
+				"name": "district",
+				"type": "String"
+			},
+			{
+				"name": "ward",
+				"type": "String"
+			},
+			{
+				"name": "community_area",
+				"type": "String"
+			},
+			{
+				"name": "year",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

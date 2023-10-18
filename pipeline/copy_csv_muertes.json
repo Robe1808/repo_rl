@@ -1,0 +1,89 @@
+{
+	"name": "copy_csv_muertes",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy csv muertes",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "HttpReadSettings",
+							"requestMethod": "GET"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "origen_http_muertes",
+						"type": "DatasetReference",
+						"parameters": {
+							"relativa_URL": {
+								"value": "@variables('URL_relativa')",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "destino_csv_muertes",
+						"type": "DatasetReference",
+						"parameters": {
+							"nombre_archivo": {
+								"value": "@variables('archivo_salida')",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"variables": {
+			"URL_relativa": {
+				"type": "String",
+				"defaultValue": "Ley002/datafactory/main/respuesta_estado.csv"
+			},
+			"archivo_salida": {
+				"type": "String",
+				"defaultValue": "respuesta_estado.csv"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-10-05T18:36:25Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

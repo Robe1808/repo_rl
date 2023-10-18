@@ -1,0 +1,33 @@
+{
+	"name": "destino_csv_muertes",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_storage18087",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"nombre_archivo": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().nombre_archivo",
+					"type": "Expression"
+				},
+				"folderPath": "ecdc",
+				"fileSystem": "output"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

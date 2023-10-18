@@ -1,0 +1,78 @@
+{
+	"name": "dataflow_movies",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "input_csv_movies",
+						"type": "DatasetReference"
+					},
+					"name": "movies",
+					"description": "datos del csv movies que serán transformados y transportados"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "output_csv_movies",
+						"type": "DatasetReference"
+					},
+					"name": "moviesclean",
+					"description": "Conjunto de datos movies csv limpios"
+				},
+				{
+					"dataset": {
+						"referenceName": "output_csv_movies",
+						"type": "DatasetReference"
+					},
+					"name": "MoviesByYear",
+					"description": "Datos con el conteo de películas por año"
+				}
+			],
+			"transformations": [
+				{
+					"name": "YearExtraction",
+					"description": "La columna 'title' contiene el nombre y el año de la película, esta función extrae (separa) el año y lo guarda en una nueva columna"
+				},
+				{
+					"name": "MoviesCount",
+					"description": "Función para contar el número de películas por cada año"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          movieId as string,",
+				"          title as string,",
+				"          genres as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> movies",
+				"movies derive(year = toInteger(trim(right(title, 6), '()')),",
+				"          title = toString(left(title, length(title) -6))) ~> YearExtraction",
+				"YearExtraction aggregate(groupBy(year),",
+				"     movies_count = count()) ~> MoviesCount",
+				"YearExtraction sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['movies_clean.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> moviesclean",
+				"MoviesCount sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['MoviesByYear.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> MoviesByYear"
+			]
+		}
+	}
+}

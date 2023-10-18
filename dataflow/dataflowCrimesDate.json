@@ -1,0 +1,88 @@
+{
+	"name": "dataflowCrimesDate",
+	"properties": {
+		"description": "Csv que recibe el tratamiento de conteo de fecha de Crime ( columna iucr)",
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ChicagoCrimes",
+						"type": "DatasetReference"
+					},
+					"name": "Crimes",
+					"description": "Datos CSV Crimes. Transformar datos de fecha"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "CountByDayTemporal",
+						"type": "DatasetReference"
+					},
+					"name": "ConteoporDia",
+					"description": "Count iucr de CSV Crimes"
+				}
+			],
+			"transformations": [
+				{
+					"name": "fecha",
+					"description": "Extraer fecha en formato 'yyyy-MM-dd' de la columna date"
+				},
+				{
+					"name": "CountByWeek",
+					"description": "Conteo de datos por \"DayOfWeekCount\" de la columna \"iucr\""
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          id as integer,",
+				"          case_number as string,",
+				"          date as string,",
+				"          block as string,",
+				"          iucr as string,",
+				"          primary_type as string,",
+				"          description as string,",
+				"          location_description as string,",
+				"          arrest as boolean,",
+				"          domestic as boolean,",
+				"          beat as short,",
+				"          district as short,",
+				"          ward as short,",
+				"          community_area as short,",
+				"          year as short",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> Crimes",
+				"Crimes derive(date = left(date, 10)) ~> fecha",
+				"fecha aggregate(groupBy(DayOfWeekCount = dayOfWeek(toDate(date,'yyyy-MM-dd'))),",
+				"     iucr = count(iucr)) ~> CountByWeek",
+				"CountByWeek sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          id as string,",
+				"          case_number as string,",
+				"          date as string,",
+				"          block as string,",
+				"          iucr as string,",
+				"          primary_type as string,",
+				"          description as string,",
+				"          location_description as string,",
+				"          arrest as string,",
+				"          domestic as string,",
+				"          beat as string,",
+				"          district as string,",
+				"          ward as string,",
+				"          community_area as string,",
+				"          year as string",
+				"     ),",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> ConteoporDia"
+			]
+		}
+	}
+}

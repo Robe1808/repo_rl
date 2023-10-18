@@ -1,0 +1,20 @@
+{
+	"name": "JsonURL",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_storage18087",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "file_URL.json",
+				"fileSystem": "config"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

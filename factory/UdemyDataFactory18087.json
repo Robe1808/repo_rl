@@ -1,0 +1,9 @@
+{
+	"name": "UdemyDataFactory18087",
+	"location": "eastus2",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "d86749a4-f4b7-48e7-8f4f-4a2079eebc47",
+		"tenantId": "982255f5-8a74-41c0-8c19-f4e0bb6be7f5"
+	}
+}

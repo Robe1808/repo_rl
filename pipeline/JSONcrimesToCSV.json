@@ -1,0 +1,184 @@
+{
+	"name": "JSONcrimesToCSV",
+	"properties": {
+		"activities": [
+			{
+				"name": "HTTP JSON crimes a CSV",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.00:10:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "JsonSource",
+						"storeSettings": {
+							"type": "HttpReadSettings",
+							"requestMethod": "GET"
+						},
+						"formatSettings": {
+							"type": "JsonReadSettings"
+						}
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".csv"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"path": "$['id']"
+								},
+								"sink": {
+									"name": "id"
+								}
+							},
+							{
+								"source": {
+									"path": "$['case_number']"
+								},
+								"sink": {
+									"name": "case_number"
+								}
+							},
+							{
+								"source": {
+									"path": "$['date']"
+								},
+								"sink": {
+									"name": "date"
+								}
+							},
+							{
+								"source": {
+									"path": "$['block']"
+								},
+								"sink": {
+									"name": "block"
+								}
+							},
+							{
+								"source": {
+									"path": "$['iucr']"
+								},
+								"sink": {
+									"name": "iucr"
+								}
+							},
+							{
+								"source": {
+									"path": "$['primary_type']"
+								},
+								"sink": {
+									"name": "primary_type"
+								}
+							},
+							{
+								"source": {
+									"path": "$['description']"
+								},
+								"sink": {
+									"name": "description"
+								}
+							},
+							{
+								"source": {
+									"path": "$['location_description']"
+								},
+								"sink": {
+									"name": "location_description"
+								}
+							},
+							{
+								"source": {
+									"path": "$['arrest']"
+								},
+								"sink": {
+									"name": "arrest"
+								}
+							},
+							{
+								"source": {
+									"path": "$['domestic']"
+								},
+								"sink": {
+									"name": "domestic"
+								}
+							},
+							{
+								"source": {
+									"path": "$['beat']"
+								},
+								"sink": {
+									"name": "beat"
+								}
+							},
+							{
+								"source": {
+									"path": "$['district']"
+								},
+								"sink": {
+									"name": "district"
+								}
+							},
+							{
+								"source": {
+									"path": "$['ward']"
+								},
+								"sink": {
+									"name": "ward"
+								}
+							},
+							{
+								"source": {
+									"path": "$['community_area']"
+								},
+								"sink": {
+									"name": "community_area"
+								}
+							},
+							{
+								"source": {
+									"path": "$['year']"
+								},
+								"sink": {
+									"name": "year"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "crimesJSON",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ChicagoCrimes",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2023-10-03T19:14:33Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,75 @@
+{
+	"name": "DF_MTA_01",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Financial_sample",
+						"type": "DatasetReference"
+					},
+					"name": "FINANCIALSAMPLE"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "output_FINANCIAL",
+						"type": "DatasetReference"
+					},
+					"name": "outputtxt"
+				}
+			],
+			"transformations": [
+				{
+					"name": "select1"
+				},
+				{
+					"name": "aggregate1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          Segment as string,",
+				"          Country as string,",
+				"          Product as string,",
+				"          {Discount Band} as string,",
+				"          {Units Sold} as string,",
+				"          {Manufacturing Price} as string,",
+				"          {Sale Price} as string,",
+				"          {Gross Sales} as string,",
+				"          Discounts as string,",
+				"          { Sales} as float,",
+				"          COGS as string,",
+				"          Profit as float,",
+				"          Date as string,",
+				"          {Month Number} as string,",
+				"          {Month Name} as string,",
+				"          Year as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> FINANCIALSAMPLE",
+				"FINANCIALSAMPLE select(mapColumn(",
+				"          Country,",
+				"          { Sales},",
+				"          Profit",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 aggregate(groupBy(Country),",
+				"     Profit = sum(Profit),",
+				"          { Sales} = sum({ Sales})) ~> aggregate1",
+				"aggregate1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> outputtxt"
+			]
+		}
+	}
+}
