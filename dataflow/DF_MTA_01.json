@@ -19,6 +19,9 @@
 						"type": "DatasetReference"
 					},
 					"name": "outputtxt"
+				},
+				{
+					"name": "sink1"
 				}
 			],
 			"transformations": [
@@ -68,7 +71,11 @@
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     partitionBy('hash', 1)) ~> outputtxt"
+				"     partitionBy('hash', 1)) ~> outputtxt",
+				"aggregate1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
 			]
 		}
 	}

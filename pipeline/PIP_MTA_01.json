@@ -26,6 +26,31 @@
 					},
 					"traceLevel": "Fine"
 				}
+			},
+			{
+				"name": "Script1",
+				"description": "actu",
+				"type": "Script",
+				"dependsOn": [
+					{
+						"activity": "DF_MTA_01",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"scripts": [],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
 			}
 		],
 		"annotations": [],
