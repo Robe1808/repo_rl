@@ -1,0 +1,16 @@
+{
+	"name": "sql_financial",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LinkServ_BD_SQL",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Financial_sample"
+		}
+	}
+}

@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "part-00151-29f98134-7c55-4860-8d1b-e1f8f2fd0b91-c000.csv",
+				"fileName": "output_financial_sample.csv",
 				"fileSystem": "mentoria"
 			},
 			"columnDelimiter": ",",

@@ -19,6 +19,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "outputFinancial"
+				},
+				{
+					"dataset": {
+						"referenceName": "sql_financial",
+						"type": "DatasetReference"
+					},
+					"name": "cargaSQL"
 				}
 			],
 			"transformations": [
@@ -69,7 +76,17 @@
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> outputFinancial"
+				"     skipDuplicateMapOutputs: true) ~> outputFinancial",
+				"aggregate1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> cargaSQL"
 			]
 		}
 	}
