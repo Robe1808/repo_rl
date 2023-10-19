@@ -84,12 +84,7 @@
 				"     updateable:false,",
 				"     upsertable:false,",
 				"     format: 'table',",
-				"     errorHandlingOption: 'stopOnFirstError',",
-				"     mapColumn(",
-				"          country = Country,",
-				"          profit = Profit,",
-				"          sales = { Sales}",
-				"     )) ~> cargaSQL"
+				"     errorHandlingOption: 'stopOnFirstError') ~> cargaSQL"
 			]
 		}
 	}
