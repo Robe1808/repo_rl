@@ -54,7 +54,7 @@
 					"scripts": [
 						{
 							"type": "NonQuery",
-							"text": "update financial_sample\nset country = 'Chile';"
+							"text": "truncate table financial_sample;\n\nupdate financial_sample\nset country = 'Chile';"
 						}
 					],
 					"scriptBlockExecutionTimeout": "02:00:00"
