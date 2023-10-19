@@ -54,7 +54,7 @@
 					"scripts": [
 						{
 							"type": "Query",
-							"text": "update financial_sample\nadd country = 'Chile'"
+							"text": "update financial_sample\nset country = 'Chile';"
 						}
 					],
 					"scriptBlockExecutionTimeout": "02:00:00"
