@@ -71,6 +71,7 @@
 				"          { Sales} = sum({ Sales})) ~> aggregate1",
 				"aggregate1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     filePattern:'ejemplo.txt',",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",

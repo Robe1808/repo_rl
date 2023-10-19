@@ -53,7 +53,7 @@
 				"typeProperties": {
 					"scripts": [
 						{
-							"type": "Query",
+							"type": "NonQuery",
 							"text": "update financial_sample\nset country = 'Chile';"
 						}
 					],
