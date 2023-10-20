@@ -32,7 +32,7 @@
 						"referenceName": "Dim_Sales_germany",
 						"type": "DatasetReference"
 					},
-					"name": "DimSalesGermany"
+					"name": "Paises"
 				}
 			],
 			"transformations": [
@@ -43,10 +43,10 @@
 					"name": "aggregate1"
 				},
 				{
-					"name": "aggregate2"
+					"name": "aggregate3"
 				},
 				{
-					"name": "filter1"
+					"name": "select2"
 				}
 			],
 			"scriptLines": [
@@ -83,11 +83,13 @@
 				"select1 aggregate(groupBy(Country),",
 				"     Profit = sum(Profit),",
 				"          { Sales} = sum({ Sales})) ~> aggregate1",
-				"filter1 aggregate(groupBy({Month Name}),",
-				"     { Sales} = mean({ Sales}),",
-				"     partitionBy('hash', 1)) ~> aggregate2",
-				"FINANCIALSAMPLE filter(Country == 'Germany',",
-				"     partitionBy('hash', 1)) ~> filter1",
+				"FINANCIALSAMPLE aggregate(groupBy(Country),",
+				"     {n filas} = count(Country)) ~> aggregate3",
+				"aggregate3 select(mapColumn(",
+				"          Country",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
 				"aggregate1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     partitionFileNames:['output_Financial.csv'],",
@@ -116,13 +118,13 @@
 				"          sales = { Sales}",
 				"     ),",
 				"     partitionBy('hash', 1)) ~> cargaSQL",
-				"aggregate2 sink(allowSchemaDrift: true,",
+				"select2 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> DimSalesGermany"
+				"     skipDuplicateMapOutputs: true) ~> Paises"
 			]
 		}
 	}
