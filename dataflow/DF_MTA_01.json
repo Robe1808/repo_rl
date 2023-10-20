@@ -18,7 +18,21 @@
 						"referenceName": "output_FINANCIAL",
 						"type": "DatasetReference"
 					},
-					"name": "outputtxt"
+					"name": "outputFinancial"
+				},
+				{
+					"dataset": {
+						"referenceName": "sql_financial",
+						"type": "DatasetReference"
+					},
+					"name": "cargaSQL"
+				},
+				{
+					"dataset": {
+						"referenceName": "Dim_Sales_germany",
+						"type": "DatasetReference"
+					},
+					"name": "Paises"
 				}
 			],
 			"transformations": [
@@ -27,6 +41,12 @@
 				},
 				{
 					"name": "aggregate1"
+				},
+				{
+					"name": "aggregate3"
+				},
+				{
+					"name": "select2"
 				}
 			],
 			"scriptLines": [
@@ -42,7 +62,7 @@
 				"          Discounts as string,",
 				"          { Sales} as float,",
 				"          COGS as string,",
-				"          Profit as float,",
+				"          Profit as string,",
 				"          Date as string,",
 				"          {Month Number} as string,",
 				"          {Month Name} as string,",
@@ -50,25 +70,61 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> FINANCIALSAMPLE",
+				"     ignoreNoFilesFound: false,",
+				"     partitionBy('hash', 1)) ~> FINANCIALSAMPLE",
 				"FINANCIALSAMPLE select(mapColumn(",
 				"          Country,",
 				"          { Sales},",
 				"          Profit",
 				"     ),",
+				"     partitionBy('hash', 1),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select1",
 				"select1 aggregate(groupBy(Country),",
 				"     Profit = sum(Profit),",
 				"          { Sales} = sum({ Sales})) ~> aggregate1",
+				"FINANCIALSAMPLE aggregate(groupBy(Country),",
+				"     {n filas} = count(Country)) ~> aggregate3",
+				"aggregate3 select(mapColumn(",
+				"          Country",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
 				"aggregate1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     partitionFileNames:['output_Financial.csv'],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     partitionBy('hash', 1)) ~> outputtxt"
+				"     partitionBy('hash', 1)) ~> outputFinancial",
+				"aggregate1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          country as string,",
+				"          profit as double,",
+				"          sales as double",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          country = Country,",
+				"          profit = Profit,",
+				"          sales = { Sales}",
+				"     ),",
+				"     partitionBy('hash', 1)) ~> cargaSQL",
+				"select2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> Paises"
 			]
 		}
 	}

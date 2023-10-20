@@ -11,7 +11,7 @@
 			"sheetName": "Sheet1",
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "Financial Sample.xlsx",
+				"fileName": "financial_sample.xlsx",
 				"fileSystem": "mentoria"
 			},
 			"firstRowAsHeader": true
