@@ -26,6 +26,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "cargaSQL"
+				},
+				{
+					"dataset": {
+						"referenceName": "Dim_Sales_germany",
+						"type": "DatasetReference"
+					},
+					"name": "DimSalesGermany"
 				}
 			],
 			"transformations": [
@@ -34,6 +41,12 @@
 				},
 				{
 					"name": "aggregate1"
+				},
+				{
+					"name": "aggregate2"
+				},
+				{
+					"name": "filter1"
 				}
 			],
 			"scriptLines": [
@@ -49,7 +62,7 @@
 				"          Discounts as string,",
 				"          { Sales} as float,",
 				"          COGS as string,",
-				"          Profit as float,",
+				"          Profit as string,",
 				"          Date as string,",
 				"          {Month Number} as string,",
 				"          {Month Name} as string,",
@@ -57,7 +70,8 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> FINANCIALSAMPLE",
+				"     ignoreNoFilesFound: false,",
+				"     partitionBy('hash', 1)) ~> FINANCIALSAMPLE",
 				"FINANCIALSAMPLE select(mapColumn(",
 				"          Country,",
 				"          { Sales},",
@@ -69,6 +83,11 @@
 				"select1 aggregate(groupBy(Country),",
 				"     Profit = sum(Profit),",
 				"          { Sales} = sum({ Sales})) ~> aggregate1",
+				"filter1 aggregate(groupBy({Month Name}),",
+				"     { Sales} = mean({ Sales}),",
+				"     partitionBy('hash', 1)) ~> aggregate2",
+				"FINANCIALSAMPLE filter(Country == 'Germany',",
+				"     partitionBy('hash', 1)) ~> filter1",
 				"aggregate1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     partitionFileNames:['output_Financial.csv'],",
@@ -96,7 +115,14 @@
 				"          profit = Profit,",
 				"          sales = { Sales}",
 				"     ),",
-				"     partitionBy('hash', 1)) ~> cargaSQL"
+				"     partitionBy('hash', 1)) ~> cargaSQL",
+				"aggregate2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> DimSalesGermany"
 			]
 		}
 	}

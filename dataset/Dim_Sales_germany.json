@@ -1,0 +1,23 @@
+{
+	"name": "Dim_Sales_germany",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_storage18087",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "SALES_GERMANY.csv",
+				"fileSystem": "mentoria"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
